@@ -1,3 +1,4 @@
+//List of Questions
 var questions = [
     {
         question: "What is the most effective poke ball?",
@@ -41,9 +42,52 @@ var questions = [
     }
 ];
 
+var quizArea = $("#content-area")
+
 var timer;
 
+//Game Functions
 var game = {
     correct: 0,
     incorrect: 0,
     counter: 120,
+
+    timecounter: function () {
+        game.counter--;
+        $("#time-left").html(game.counter)
+        if (game.counter === 0) { //End game once counter reaches 0
+            game.done();
+        }
+    },
+
+    start: function () {
+        timer = setInterval(game.timecounter, 1000);
+
+        $("#start").remove();
+
+        $("#counter-area").prepend("<h2>Time Remaining: <span id='time-left'>120</span> Seconds</h2>");
+
+        for (var i = 0; i < questions.length; i++) {
+            //Append each question from the questions array
+            quizArea.append("<h3>" + questions[i].question + "</h3>");
+
+            //Append input and each answer from answers array, from each question
+            for (var j = 0; j < questions[i].answers.length; j++) {
+                quizArea.append("<input type='radio' name='question-" + i +
+                    "' value='" + questions[i].answers[j] + "''>" + questions[i].answers[j]);
+            }
+        }
+
+    }
+
+}
+
+// Click Functions
+
+$(document).on("click", "#start", function () {
+    game.start();
+});
+
+$(document).on("click", "#done", function () {
+    game.done();
+});
